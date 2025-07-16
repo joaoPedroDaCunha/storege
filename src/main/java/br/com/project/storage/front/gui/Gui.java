@@ -2,10 +2,31 @@ package br.com.project.storage.front.gui;
 
 import javax.swing.JFrame;
 
+import java.awt.GraphicsEnvironment;
+import java.awt.HeadlessException;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
 public class Gui extends JFrame implements WindowListener{
+
+    public Gui(){
+        if (GraphicsEnvironment.isHeadless()) {
+                System.err.println("Ambiente headless detectado. Operações gráficas não são suportadas."); 
+                throw new HeadlessException("Ambiente headless detectado."); 
+            } 
+            System.out.println("Construtor Gui chamado");  
+            try {
+                initComponents(); 
+            } 
+            catch (Exception e) { 
+                System.out.println("Erro em initComponents: " + e.getMessage());
+                e.printStackTrace(); 
+            } 
+    }
+
+    private void initComponents(){
+
+    }
 
     @Override
     public void windowActivated(WindowEvent e) {
