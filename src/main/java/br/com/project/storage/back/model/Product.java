@@ -14,7 +14,7 @@ import jakarta.persistence.Table;
 @Table(name = "Product")
 public class Product implements Comparable<Product>{
     
-    private @Column(name = "Product_id") @Id @GeneratedValue(strategy = GenerationType.IDENTITY) int codeProduct ;
+    private @Column(name = "Product_id") @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Integer codeProduct ;
     private @Column(name = "Forn_code") int codeProductForn;
     private @Column(name = "Product",length = 30 , nullable = false) String nameProduct;
     private @Column(name = "BaseWeight") double baseWeight;
