@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import br.com.project.storage.back.enums.EntryStatus;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -14,6 +15,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -31,13 +33,15 @@ public class ProductEntry implements Comparable<ProductEntry>{
     private @Column String delivererName;
     private @Column(name = "vehiclePlate",length = 7,nullable = false)String vehiclePlate;
     private @Column(name = "Phone") int phone;
+    private @OneToMany(mappedBy = "productEntry", cascade = CascadeType.ALL) List<AuxiliaryDocument> Document = new ArrayList<>();
 
     public ProductEntry(){
 
     }
 
     public ProductEntry(Integer codeEntry, Product product, Date dateEntry, EntryStatus status, double totalWeight,
-            int totalAmount, List<ProductAssistant> items, String delivererName, String vehiclePlate, int phone) {
+            int totalAmount, List<ProductAssistant> items, String delivererName, String vehiclePlate, int phone,
+            List<AuxiliaryDocument> document) {
         this.codeEntry = codeEntry;
         this.product = product;
         this.dateEntry = dateEntry;
@@ -48,6 +52,7 @@ public class ProductEntry implements Comparable<ProductEntry>{
         this.delivererName = delivererName;
         this.vehiclePlate = vehiclePlate;
         this.phone = phone;
+        Document = document;
     }
 
     public Integer getCodeEntry() {
@@ -110,8 +115,6 @@ public class ProductEntry implements Comparable<ProductEntry>{
         this.items.add(productAssistant);
     }
 
-    
-
     public String getDelivererName() {
         return delivererName;
     }
@@ -134,6 +137,14 @@ public class ProductEntry implements Comparable<ProductEntry>{
 
     public void setPhone(int phone) {
         this.phone = phone;
+    }
+
+    public List<AuxiliaryDocument> getDocument() {
+        return Document;
+    }
+
+    public void setDocument(AuxiliaryDocument document) {
+        this.Document.add(document);
     }
 
     @Override
