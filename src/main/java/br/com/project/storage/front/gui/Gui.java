@@ -1,7 +1,13 @@
 package br.com.project.storage.front.gui;
 
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
+import br.com.project.storage.front.panel.dashboard;
+
+import java.awt.BorderLayout;
 import java.awt.GraphicsEnvironment;
 import java.awt.HeadlessException;
 import java.awt.event.WindowEvent;
@@ -16,7 +22,7 @@ public class Gui extends JFrame implements WindowListener{
             } 
             System.out.println("Construtor Gui chamado");  
             try {
-                initComponents(); 
+                initComponents();
             } 
             catch (Exception e) { 
                 System.out.println("Erro em initComponents: " + e.getMessage());
@@ -26,6 +32,43 @@ public class Gui extends JFrame implements WindowListener{
 
     private void initComponents(){
 
+        setTitle("Minha GUI");
+        setSize(800, 600);
+        setLocationRelativeTo(null);
+		dashboard dashboard = new dashboard();
+		setLayout(new BorderLayout());
+		add(dashboard);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
+         // Criando barra de menu
+        JMenuBar menuBar = new JMenuBar();
+
+        // Menu principal "Arquivo"
+        JMenu menuArquivo = new JMenu("Arquivo");
+
+        // Itens do menu
+        JMenuItem itemNovo = new JMenuItem("Novo");
+        JMenuItem itemAbrir = new JMenuItem("Abrir");
+        JMenuItem itemSair = new JMenuItem("Sair");
+
+        // Adicionando itens ao menu
+        menuArquivo.add(itemNovo);
+        menuArquivo.add(itemAbrir);
+        menuArquivo.addSeparator(); // linha separadora
+        menuArquivo.add(itemSair);
+
+        // Adicionando o menu à barra
+        menuBar.add(menuArquivo);
+
+        // Menu secundário "Ajuda"
+        JMenu menuAjuda = new JMenu("Ajuda");
+        JMenuItem itemSobre = new JMenuItem("Sobre");
+        menuAjuda.add(itemSobre);
+        menuBar.add(menuAjuda);
+
+        // Define a barra de menu na janela
+        setJMenuBar(menuBar);
+    
     }
 
     @Override
