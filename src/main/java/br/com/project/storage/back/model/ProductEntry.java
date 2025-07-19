@@ -28,22 +28,27 @@ public class ProductEntry implements Comparable<ProductEntry>{
     private @Column(nullable = false) double totalWeight;
     private @Column(nullable = false) int totalAmount;
     private @ElementCollection List<ProductAssistant> items = new ArrayList<>();
+    private @Column String delivererName;
+    private @Column(name = "vehiclePlate",length = 7,nullable = false)String vehiclePlate;
+    private @Column(name = "Phone") int phone;
 
     public ProductEntry(){
 
     }
 
     public ProductEntry(Integer codeEntry, Product product, Date dateEntry, EntryStatus status, double totalWeight,
-            int totalAmount) {
+            int totalAmount, List<ProductAssistant> items, String delivererName, String vehiclePlate, int phone) {
         this.codeEntry = codeEntry;
         this.product = product;
         this.dateEntry = dateEntry;
         this.status = status;
         this.totalWeight = totalWeight;
         this.totalAmount = totalAmount;
+        this.items = items;
+        this.delivererName = delivererName;
+        this.vehiclePlate = vehiclePlate;
+        this.phone = phone;
     }
-
-    
 
     public Integer getCodeEntry() {
         return codeEntry;
@@ -103,6 +108,32 @@ public class ProductEntry implements Comparable<ProductEntry>{
 
     public void setItems(ProductAssistant productAssistant){
         this.items.add(productAssistant);
+    }
+
+    
+
+    public String getDelivererName() {
+        return delivererName;
+    }
+
+    public void setDelivererName(String delivererName) {
+        this.delivererName = delivererName;
+    }
+
+    public String getVehiclePlate() {
+        return vehiclePlate;
+    }
+
+    public void setVehiclePlate(String vehiclePlate) {
+        this.vehiclePlate = vehiclePlate;
+    }
+
+    public int getPhone() {
+        return phone;
+    }
+
+    public void setPhone(int phone) {
+        this.phone = phone;
     }
 
     @Override
