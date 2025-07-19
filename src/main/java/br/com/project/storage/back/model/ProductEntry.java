@@ -1,9 +1,12 @@
 package br.com.project.storage.back.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import br.com.project.storage.back.enums.EntryStatus;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -24,6 +27,7 @@ public class ProductEntry implements Comparable<ProductEntry>{
     private @Column(name = "EntryStatus") @Enumerated(EnumType.STRING) EntryStatus status;
     private @Column(nullable = false) double totalWeight;
     private @Column(nullable = false) int totalAmount;
+    private @ElementCollection List<ProductAssistant> items = new ArrayList<>();
 
     public ProductEntry(){
 
@@ -87,6 +91,18 @@ public class ProductEntry implements Comparable<ProductEntry>{
 
     public void setTotalAmount(int totalAmount) {
         this.totalAmount = totalAmount;
+    }
+
+    public List<ProductAssistant> getItems(){
+        return items;
+    }
+
+    public void setItems(int batchCode,int quantity,int totalWeight){
+        this.items.add(new ProductAssistant(batchCode,quantity,totalWeight));
+    }
+
+    public void setItems(ProductAssistant productAssistant){
+        this.items.add(productAssistant);
     }
 
     @Override
