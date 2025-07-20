@@ -10,7 +10,7 @@ import javax.swing.JTextField;
 public class dashboard extends JPanel{
 
     public dashboard(){
-         setLayout(new FlowLayout());
+        setLayout(new FlowLayout());
 
         JLabel labelNome = new JLabel("Nome:");
         JTextField campoNome = new JTextField(20);
