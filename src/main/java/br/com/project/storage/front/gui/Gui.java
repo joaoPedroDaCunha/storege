@@ -40,33 +40,25 @@ public class Gui extends JFrame implements WindowListener{
 		add(dashboard);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
-         // Criando barra de menu
         JMenuBar menuBar = new JMenuBar();
+        JMenu menuEntry = new JMenu("Entrada");
+        JMenuItem itemNovo = new JMenuItem("Nova Entrada");
+        JMenuItem itemAbrir = new JMenuItem("Historico");
 
-        // Menu principal "Arquivo"
-        JMenu menuArquivo = new JMenu("Arquivo");
+        menuEntry.add(itemNovo);
+        menuEntry.add(itemAbrir);
+        menuBar.add(menuEntry);
 
-        // Itens do menu
-        JMenuItem itemNovo = new JMenuItem("Novo");
-        JMenuItem itemAbrir = new JMenuItem("Abrir");
-        JMenuItem itemSair = new JMenuItem("Sair");
+        JMenu menConferecia = new JMenu("Conferencia");
+        JMenuItem itemSobre = new JMenuItem("Entradas Para Conferir");
+        menConferecia.add(itemSobre);
+        menuBar.add(menConferecia);
 
-        // Adicionando itens ao menu
-        menuArquivo.add(itemNovo);
-        menuArquivo.add(itemAbrir);
-        menuArquivo.addSeparator(); // linha separadora
-        menuArquivo.add(itemSair);
+        JMenu menuProdct = new JMenu("Produto");
+        JMenuItem ItemProdutc = new JMenuItem("Cadastrar produto");
+        menuProdct.add(ItemProdutc);
+        menuBar.add(menuProdct);
 
-        // Adicionando o menu à barra
-        menuBar.add(menuArquivo);
-
-        // Menu secundário "Ajuda"
-        JMenu menuAjuda = new JMenu("Ajuda");
-        JMenuItem itemSobre = new JMenuItem("Sobre");
-        menuAjuda.add(itemSobre);
-        menuBar.add(menuAjuda);
-
-        // Define a barra de menu na janela
         setJMenuBar(menuBar);
     
     }
