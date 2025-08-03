@@ -5,6 +5,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import br.com.project.storage.front.panel.CadasterProductPanel;
 import br.com.project.storage.front.panel.dashboard;
 
 import java.awt.BorderLayout;
@@ -56,6 +57,13 @@ public class Gui extends JFrame implements WindowListener{
 
         JMenu menuProdct = new JMenu("Produto");
         JMenuItem ItemProdutc = new JMenuItem("Cadastrar produto");
+        ItemProdutc.addActionListener(e->{
+            getContentPane().removeAll();
+            CadasterProductPanel CadasterProductPanel = new CadasterProductPanel();
+            getContentPane().add(CadasterProductPanel);
+            revalidate();
+            repaint();
+        });
         menuProdct.add(ItemProdutc);
         menuBar.add(menuProdct);
 
