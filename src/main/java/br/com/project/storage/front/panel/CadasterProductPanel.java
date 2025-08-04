@@ -3,10 +3,14 @@ package br.com.project.storage.front.panel;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+
+import br.com.project.storage.back.controller.ProductController;
 import br.com.project.storage.back.enums.CountingFormat;
 import br.com.project.storage.back.model.Product;
 
 public class CadasterProductPanel extends JPanel {
+
+    private ProductController controller ;
 
     private JTextField txtCodeForn;
     private JTextField txtNameProduct;
@@ -67,7 +71,10 @@ public class CadasterProductPanel extends JPanel {
                 int unit = Integer.parseInt(txtBaseUnit.getText());
 
                 Product product = new Product(0, codeForn, name, weight, format, unit);
+                controller.post(product);
+
                 JOptionPane.showMessageDialog(this, "Produto cadastrado:\n" + product.getNameProduct());
+
 
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Erro ao cadastrar produto:\n" + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
