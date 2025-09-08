@@ -17,6 +17,9 @@ public class ProductController {
     public void post(Product product){
         productService.Post(product);
     }
+    public void put(Product product){
+        productService.Put(product);
+    }
     public Optional<Product> getByName(Integer idProduct){
         return productService.getByName(idProduct);
     }

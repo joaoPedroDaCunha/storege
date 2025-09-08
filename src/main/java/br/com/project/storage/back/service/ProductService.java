@@ -23,6 +23,11 @@ public class ProductService {
     public void Post(Product Product){
         ProductRepository.save(Product);
     }
+
+    public void Put(Product Product){
+        ProductRepository.save(Product);
+    }
+
     public Optional<Product> getByName(Integer idProduct){
         return ProductRepository.findById(idProduct);
     }
