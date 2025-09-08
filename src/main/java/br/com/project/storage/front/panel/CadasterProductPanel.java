@@ -70,7 +70,7 @@ public class CadasterProductPanel extends JPanel {
                 CountingFormat format = (CountingFormat) cmbFormat.getSelectedItem();
                 int unit = Integer.parseInt(txtBaseUnit.getText());
 
-                Product product = new Product(0, codeForn, name, weight, format, unit);
+                Product product = new Product(codeForn, name, weight, format, unit);
                 controller.post(product);
 
                 JOptionPane.showMessageDialog(this, "Produto cadastrado:\n" + product.getNameProduct());

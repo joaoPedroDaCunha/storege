@@ -35,6 +35,16 @@ public class Product implements Comparable<Product>{
         this.baseUnit = baseUnit;
     }
 
+    public Product( int codeProductForn, String nameProduct, double baseWeight, CountingFormat format,
+            int baseUnit) {
+        this.codeProductForn = codeProductForn;
+        this.nameProduct = nameProduct;
+        this.baseWeight = baseWeight;
+        this.format = format;
+        this.baseUnit = baseUnit;
+    }
+
+
     public int getCodeProduct() {
         return codeProduct;
     }
