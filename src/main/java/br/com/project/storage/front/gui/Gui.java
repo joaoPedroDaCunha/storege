@@ -5,6 +5,10 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import br.com.project.storage.back.controller.ProductController;
 import br.com.project.storage.front.panel.CadasterProductPanel;
 import br.com.project.storage.front.panel.dashboard;
 
@@ -14,7 +18,10 @@ import java.awt.HeadlessException;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
+@Component
 public class Gui extends JFrame implements WindowListener{
+    @Autowired
+    private ProductController controller;
 
     public Gui(){
         if (GraphicsEnvironment.isHeadless()) {
@@ -59,7 +66,7 @@ public class Gui extends JFrame implements WindowListener{
         JMenuItem ItemProdutc = new JMenuItem("Cadastrar produto");
         ItemProdutc.addActionListener(e->{
             getContentPane().removeAll();
-            CadasterProductPanel CadasterProductPanel = new CadasterProductPanel();
+            CadasterProductPanel CadasterProductPanel = new CadasterProductPanel(controller);
             getContentPane().add(CadasterProductPanel);
             revalidate();
             repaint();

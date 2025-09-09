@@ -1,6 +1,9 @@
 package br.com.project.storage.front.panel;
 
 import javax.swing.*;
+
+import org.springframework.stereotype.Component;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
@@ -8,9 +11,10 @@ import br.com.project.storage.back.controller.ProductController;
 import br.com.project.storage.back.enums.CountingFormat;
 import br.com.project.storage.back.model.Product;
 
+@Component
 public class CadasterProductPanel extends JPanel {
 
-    private ProductController controller ;
+    private final ProductController controller;
 
     private JTextField txtCodeForn;
     private JTextField txtNameProduct;
@@ -18,7 +22,8 @@ public class CadasterProductPanel extends JPanel {
     private JComboBox<CountingFormat> cmbFormat;
     private JTextField txtBaseUnit;
 
-    public CadasterProductPanel() {
+    public CadasterProductPanel(ProductController controller2) {
+        this.controller = controller2;
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(8, 8, 8, 8); // Espaçamento entre os componentes
@@ -26,35 +31,40 @@ public class CadasterProductPanel extends JPanel {
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         // Campo: Código do Fornecedor
-        gbc.gridx = 0; gbc.gridy = 0;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
         add(new JLabel("Código do Fornecedor:"), gbc);
         txtCodeForn = new JTextField(20);
         gbc.gridx = 1;
         add(txtCodeForn, gbc);
 
         // Campo: Nome do Produto
-        gbc.gridx = 0; gbc.gridy = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 1;
         add(new JLabel("Nome do Produto:"), gbc);
         txtNameProduct = new JTextField(20);
         gbc.gridx = 1;
         add(txtNameProduct, gbc);
 
         // Campo: Peso Base
-        gbc.gridx = 0; gbc.gridy = 2;
+        gbc.gridx = 0;
+        gbc.gridy = 2;
         add(new JLabel("Peso Base:"), gbc);
         txtBaseWeight = new JTextField(20);
         gbc.gridx = 1;
         add(txtBaseWeight, gbc);
 
         // Campo: Formato de Contagem
-        gbc.gridx = 0; gbc.gridy = 3;
+        gbc.gridx = 0;
+        gbc.gridy = 3;
         add(new JLabel("Formato de Contagem:"), gbc);
         cmbFormat = new JComboBox<>(CountingFormat.values());
         gbc.gridx = 1;
         add(cmbFormat, gbc);
 
         // Campo: Unidade Base
-        gbc.gridx = 0; gbc.gridy = 4;
+        gbc.gridx = 0;
+        gbc.gridy = 4;
         add(new JLabel("Unidade Base:"), gbc);
         txtBaseUnit = new JTextField(20);
         gbc.gridx = 1;
@@ -75,13 +85,16 @@ public class CadasterProductPanel extends JPanel {
 
                 JOptionPane.showMessageDialog(this, "Produto cadastrado:\n" + product.getNameProduct());
 
-
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Erro ao cadastrar produto:\n" + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Erro ao cadastrar produto:\n" + ex.getMessage(), "Erro",
+                        JOptionPane.ERROR_MESSAGE);
+                System.out.print(ex.getMessage());
             }
         });
 
-        gbc.gridx = 0; gbc.gridy = 5; gbc.gridwidth = 2;
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
         add(btnSalvar, gbc);
     }
