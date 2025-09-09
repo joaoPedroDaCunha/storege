@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import br.com.project.storage.back.controller.ProductController;
 import br.com.project.storage.front.panel.CadasterProductPanel;
+import br.com.project.storage.front.panel.ProductItemView;
 import br.com.project.storage.front.panel.dashboard;
 
 import java.awt.BorderLayout;
@@ -71,7 +72,16 @@ public class Gui extends JFrame implements WindowListener{
             revalidate();
             repaint();
         });
+        JMenuItem ItemProdutcView = new JMenuItem("Produtos cadastrados");
+        ItemProdutcView.addActionListener(e->{
+            getContentPane().removeAll();
+            ProductItemView ProductItemView = new ProductItemView(controller);
+            getContentPane().add(ProductItemView);
+            revalidate();
+            repaint();
+        });
         menuProdct.add(ItemProdutc);
+        menuProdct.add(ItemProdutcView);
         menuBar.add(menuProdct);
 
         setJMenuBar(menuBar);
