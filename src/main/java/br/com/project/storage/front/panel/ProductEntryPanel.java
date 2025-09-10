@@ -9,7 +9,6 @@ import br.com.project.storage.back.model.ProductAssistant;
 import br.com.project.storage.back.model.ProductEntry;
 import br.com.project.storage.front.Dialog.DocumentDialog;
 import br.com.project.storage.front.Dialog.ItemDialog;
-
 import com.toedter.calendar.JDateChooser;
 import org.springframework.stereotype.Component;
 
@@ -52,7 +51,7 @@ public class ProductEntryPanel extends JPanel {
         // Produto
         gbc.gridx = 0; gbc.gridy = 0;
         add(new JLabel("Produto:"), gbc);
-        List<Product> prodList = new ArrayList<>(productController.getAll());
+        List<Product> prodList = new ArrayList<>(this.productController.getAll());
         cmbProduct = new JComboBox<>(prodList.toArray(new Product[0]));
         gbc.gridx = 1;
         add(cmbProduct, gbc);
@@ -82,7 +81,7 @@ public class ProductEntryPanel extends JPanel {
         gbc.gridx = 1;
         add(txtTotalAmount, gbc);
 
-        // Lista de itens + botão de adicionar
+        // Lista de itens + botões Adicionar / Remover
         gbc.gridy++;
         gbc.gridx = 0;
         add(new JLabel("Lotes / Itens:"), gbc);
@@ -91,10 +90,16 @@ public class ProductEntryPanel extends JPanel {
         listItems.setVisibleRowCount(4);
         gbc.gridx = 1;
         add(new JScrollPane(listItems), gbc);
+
         JButton btnAddItem = new JButton("Adicionar Item");
         btnAddItem.addActionListener(e -> onAddItem());
         gbc.gridx = 2;
         add(btnAddItem, gbc);
+
+        JButton btnRemoveItem = new JButton("Remover Item");
+        btnRemoveItem.addActionListener(e -> onRemoveItem());
+        gbc.gridx = 3;
+        add(btnRemoveItem, gbc);
 
         // Entregador
         gbc.gridy++;
@@ -120,7 +125,7 @@ public class ProductEntryPanel extends JPanel {
         gbc.gridx = 1;
         add(txtPhone, gbc);
 
-        // Documentos + botão
+        // Documentos + botões Adicionar / Remover
         gbc.gridy++;
         gbc.gridx = 0;
         add(new JLabel("Documentos Auxiliares:"), gbc);
@@ -129,15 +134,21 @@ public class ProductEntryPanel extends JPanel {
         listDocs.setVisibleRowCount(4);
         gbc.gridx = 1;
         add(new JScrollPane(listDocs), gbc);
+
         JButton btnAddDoc = new JButton("Adicionar Documento");
         btnAddDoc.addActionListener(e -> onAddDocument());
         gbc.gridx = 2;
         add(btnAddDoc, gbc);
 
+        JButton btnRemoveDoc = new JButton("Remover Documento");
+        btnRemoveDoc.addActionListener(e -> onRemoveDocument());
+        gbc.gridx = 3;
+        add(btnRemoveDoc, gbc);
+
         // Botão salvar
         gbc.gridy++;
         gbc.gridx = 0;
-        gbc.gridwidth = 3;
+        gbc.gridwidth = 4;
         gbc.anchor = GridBagConstraints.CENTER;
         btnSave = new JButton("Salvar Entrada");
         btnSave.addActionListener(e -> onSave());
@@ -153,13 +164,24 @@ public class ProductEntryPanel extends JPanel {
     }
 
     private void onAddItem() {
-            ItemDialog dlg = new ItemDialog(SwingUtilities.getWindowAncestor(this));
+        ItemDialog dlg = new ItemDialog(SwingUtilities.getWindowAncestor(this));
         dlg.setVisible(true);
         ProductAssistant assistant = dlg.getResult();
         if (assistant != null) {
             itemsModel.addElement(assistant);
         }
+    }
 
+    private void onRemoveItem() {
+        int idx = listItems.getSelectedIndex();
+        if (idx >= 0) {
+            itemsModel.remove(idx);
+        } else {
+            JOptionPane.showMessageDialog(this,
+                "Selecione um item para remover.",
+                "Atenção",
+                JOptionPane.WARNING_MESSAGE);
+        }
     }
 
     private void onAddDocument() {
@@ -169,7 +191,18 @@ public class ProductEntryPanel extends JPanel {
         if (doc != null) {
             docsModel.addElement(doc);
         }
+    }
 
+    private void onRemoveDocument() {
+        int idx = listDocs.getSelectedIndex();
+        if (idx >= 0) {
+            docsModel.remove(idx);
+        } else {
+            JOptionPane.showMessageDialog(this,
+                "Selecione um documento para remover.",
+                "Atenção",
+                JOptionPane.WARNING_MESSAGE);
+        }
     }
 
     private void onSave() {
