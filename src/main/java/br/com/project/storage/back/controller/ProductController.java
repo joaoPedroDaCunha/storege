@@ -30,6 +30,6 @@ public class ProductController {
         return productService.getByName(idProduct);
     }
     public void deleteById(Integer idProduct){
-        productService.delete(idProduct);
+        productService.Delete(idProduct);
     }
 }
