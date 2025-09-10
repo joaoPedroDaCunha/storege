@@ -38,5 +38,32 @@ public class ProductAssistant {
         this.totalWeight = totalWeight;
     }
 
+    @Override
+    public String toString() {
+        return "Lote " + batchCode + "";
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + batchCode;
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ProductAssistant other = (ProductAssistant) obj;
+        if (batchCode != other.batchCode)
+            return false;
+        return true;
+    }
+
     
 }

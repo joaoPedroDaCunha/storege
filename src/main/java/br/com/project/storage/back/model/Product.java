@@ -98,4 +98,9 @@ public class Product implements Comparable<Product>{
         return nameProduct.compareToIgnoreCase(arg0.getNameProduct());
     }
 
+    @Override
+    public String toString() {
+        return this.getNameProduct();
+    }   
+
 }

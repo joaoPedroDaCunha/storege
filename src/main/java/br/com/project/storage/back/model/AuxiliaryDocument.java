@@ -5,41 +5,58 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
 
 @Entity
 public class AuxiliaryDocument {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String caminhoArquivo;
+
+    // Dois campos de texto para receber docType e docInfo vindos do painel
+    private String docType;
+    private String docInfo;
+
     @ManyToOne
+    @JoinColumn(name = "productEntry_id")
     private ProductEntry productEntry;
-    
-    public AuxiliaryDocument(Long id, String caminhoArquivo, ProductEntry productEntry) {
-        this.id = id;
-        this.caminhoArquivo = caminhoArquivo;
-        this.productEntry = productEntry;
+
+    // Construtor obrigatório para JPA
+    public AuxiliaryDocument() { }
+
+    // Construtor usado pelo JPanel (docType, docInfo)
+    public AuxiliaryDocument(String docType, String docInfo) {
+        this.docType = docType;
+        this.docInfo = docInfo;
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public String getDocType() {
+        return docType;
     }
 
-    public String getCaminhoArquivo() {
-        return caminhoArquivo;
-    }
-
-    public void setCaminhoArquivo(String caminhoArquivo) {
-        this.caminhoArquivo = caminhoArquivo;
+    public String getDocInfo() {
+        return docInfo;
     }
 
     public ProductEntry getProductEntry() {
         return productEntry;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setDocType(String docType) {
+        this.docType = docType;
+    }
+
+    public void setDocInfo(String docInfo) {
+        this.docInfo = docInfo;
     }
 
     public void setProductEntry(ProductEntry productEntry) {
@@ -64,12 +81,7 @@ public class AuxiliaryDocument {
             return false;
         AuxiliaryDocument other = (AuxiliaryDocument) obj;
         if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
-        return true;
+            return other.id == null;
+        } else return id.equals(other.id);
     }
-
-    
 }

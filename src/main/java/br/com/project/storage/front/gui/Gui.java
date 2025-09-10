@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.project.storage.back.controller.ProductController;
+import br.com.project.storage.back.controller.ProductEntreyController;
 import br.com.project.storage.front.panel.CadasterProductPanel;
+import br.com.project.storage.front.panel.ProductEntryPanel;
 import br.com.project.storage.front.panel.ProductItemView;
 import br.com.project.storage.front.panel.dashboard;
 
@@ -21,8 +23,10 @@ import java.awt.event.WindowListener;
 
 @Component
 public class Gui extends JFrame implements WindowListener{
-    @Autowired
-    private ProductController controller;
+
+    private @Autowired ProductController productController;
+    private @Autowired ProductEntreyController productEntreyController;
+
 
     public Gui(){
         if (GraphicsEnvironment.isHeadless()) {
@@ -52,6 +56,13 @@ public class Gui extends JFrame implements WindowListener{
         JMenuBar menuBar = new JMenuBar();
         JMenu menuEntry = new JMenu("Entrada");
         JMenuItem itemNovo = new JMenuItem("Nova Entrada");
+        itemNovo.addActionListener(e ->{
+            getContentPane().removeAll();
+            ProductEntryPanel productEntryPanel = new ProductEntryPanel(productEntreyController, productController) ;
+            getContentPane().add(productEntryPanel);
+            revalidate();
+            repaint();
+        });
         JMenuItem itemAbrir = new JMenuItem("Historico");
 
         menuEntry.add(itemNovo);
@@ -67,7 +78,7 @@ public class Gui extends JFrame implements WindowListener{
         JMenuItem ItemProdutc = new JMenuItem("Cadastrar produto");
         ItemProdutc.addActionListener(e->{
             getContentPane().removeAll();
-            CadasterProductPanel CadasterProductPanel = new CadasterProductPanel(controller);
+            CadasterProductPanel CadasterProductPanel = new CadasterProductPanel(productController);
             getContentPane().add(CadasterProductPanel);
             revalidate();
             repaint();
@@ -75,7 +86,7 @@ public class Gui extends JFrame implements WindowListener{
         JMenuItem ItemProdutcView = new JMenuItem("Produtos cadastrados");
         ItemProdutcView.addActionListener(e->{
             getContentPane().removeAll();
-            ProductItemView ProductItemView = new ProductItemView(controller);
+            ProductItemView ProductItemView = new ProductItemView(productController);
             getContentPane().add(ProductItemView);
             revalidate();
             repaint();
