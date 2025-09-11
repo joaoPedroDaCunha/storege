@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import br.com.project.storage.back.enums.CountingFormat;
 import br.com.project.storage.back.enums.EntryStatus;
+import br.com.project.storage.back.excptions.ValidationException;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -146,6 +148,35 @@ public class ProductEntry implements Comparable<ProductEntry>{
     public void setDocument(AuxiliaryDocument document) {
         this.Document.add(document);
     }
+
+    public void validateProductEntry(ProductEntry entry) throws ValidationException {
+    
+    double totalWeight = entry.getItems().stream().mapToDouble(ProductAssistant::getTotalWeight).sum();
+
+    int totalUnits = entry.getItems().stream().mapToInt(ProductAssistant::getQuantity).sum();
+
+    CountingFormat format = entry.getProduct().getFormat();
+    boolean isValid;
+
+    switch (format) {
+        case Unit:
+            isValid = totalUnits == entry.getTotalAmount();
+            break;
+        case Weight:
+            isValid = Double.compare(totalWeight, entry.getTotalWeight()) == 0;
+            break;
+        case WeightEndUnit:
+            isValid = Double.compare(totalWeight, entry.getTotalWeight()) == 0 && totalUnits == entry.getTotalAmount();
+            break;
+        default:
+            throw new IllegalArgumentException("Formato desconhecido: " + format);
+    }
+
+    if (!isValid) {
+        throw new ValidationException(format, totalWeight, totalUnits, entry);
+    }
+}
+
 
     @Override
     public int compareTo(ProductEntry arg0) {
