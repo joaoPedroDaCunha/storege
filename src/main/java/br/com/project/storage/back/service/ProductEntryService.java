@@ -21,7 +21,7 @@ public class ProductEntryService {
         return get ;
     }
 
-    public Optional<ProductEntry> getByID (Integer idInteger){
+    public Optional<ProductEntry> getById (Integer idInteger){
         return productEntryRepository.findById(idInteger);
     }
 

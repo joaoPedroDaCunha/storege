@@ -1,5 +1,6 @@
 package br.com.project.storage.back.controller;
 
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,10 @@ public class ProductEntreyController {
 
     public Set<ProductEntry> getAll(){
         return productEntryService.getAll();
+    }
+
+    public Optional<ProductEntry> getById(Integer idInteger ){
+        return productEntryService.getById(idInteger);
     }
 
     public void Post(ProductEntry productEntry){
