@@ -1,5 +1,6 @@
 package br.com.project.storage.back.service;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -18,6 +19,10 @@ public class ProductEntryService {
         Set<ProductEntry> get = new TreeSet<>();
         productEntrey.forEach(get::add);
         return get ;
+    }
+
+    public Optional<ProductEntry> getByID (Integer idInteger){
+        return productEntryRepository.findById(idInteger);
     }
 
     public void Post(ProductEntry productEntry){
