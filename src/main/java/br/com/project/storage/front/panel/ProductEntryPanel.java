@@ -3,6 +3,7 @@ package br.com.project.storage.front.panel;
 import br.com.project.storage.back.controller.ProductController;
 import br.com.project.storage.back.controller.ProductEntreyController;
 import br.com.project.storage.back.enums.EntryStatus;
+import br.com.project.storage.back.excptions.ValidationException;
 import br.com.project.storage.back.model.AuxiliaryDocument;
 import br.com.project.storage.back.model.Product;
 import br.com.project.storage.back.model.ProductAssistant;
@@ -66,14 +67,6 @@ public class ProductEntryPanel extends JPanel {
         gbc.gridx = 1;
         add(dateChooser, gbc);
 
-        // Peso total
-        gbc.gridy++;
-        gbc.gridx = 0;
-        add(new JLabel("Peso Total:"), gbc);
-        txtTotalWeight = new JTextField(10);
-        gbc.gridx = 1;
-        add(txtTotalWeight, gbc);
-
         // Quantidade total
         gbc.gridy++;
         gbc.gridx = 0;
@@ -81,6 +74,15 @@ public class ProductEntryPanel extends JPanel {
         txtTotalAmount = new JTextField(10);
         gbc.gridx = 1;
         add(txtTotalAmount, gbc);
+
+
+        // Peso total
+        gbc.gridy++;
+        gbc.gridx = 0;
+        add(new JLabel("Peso Total:"), gbc);
+        txtTotalWeight = new JTextField(10);
+        gbc.gridx = 1;
+        add(txtTotalWeight, gbc);
 
         // Lista de itens + botões Adicionar / Remover
         gbc.gridy++;
@@ -206,39 +208,55 @@ public class ProductEntryPanel extends JPanel {
         }
     }
 
-    private void onSave() {
-        try {
-            Product product     = (Product) cmbProduct.getSelectedItem();
-            Date dateEntry      = dateChooser.getDate();
-            EntryStatus status  = EntryStatus.Waiting;
-            double totalWeight  = Double.parseDouble(txtTotalWeight.getText());
-            int totalAmount     = Integer.parseInt(txtTotalAmount.getText());
-            List<ProductAssistant> items = Collections.list(itemsModel.elements());
-            String deliverer    = txtDelivererName.getText();
-            String plate        = txtVehiclePlate.getText();
-            int phone           = Integer.parseInt(txtPhone.getText());
-            List<AuxiliaryDocument> docs = Collections.list(docsModel.elements());
+private void onSave() {
+    try {
+        Product product     = (Product) cmbProduct.getSelectedItem();
+        Date dateEntry      = dateChooser.getDate();
+        EntryStatus status  = EntryStatus.Waiting;
+        double totalWeight  = Double.parseDouble(txtTotalWeight.getText());
+        int totalAmount     = Integer.parseInt(txtTotalAmount.getText());
+        List<ProductAssistant> items = Collections.list(itemsModel.elements());
+        String deliverer    = txtDelivererName.getText();
+        String plate        = txtVehiclePlate.getText();
+        int phone           = Integer.parseInt(txtPhone.getText());
+        List<AuxiliaryDocument> docs = Collections.list(docsModel.elements());
 
-            ProductEntry entry = new ProductEntry(
-                null, product, dateEntry, status,
-                totalWeight, totalAmount,
-                items, deliverer, plate, phone, docs
-            );
-            entryController.Post(entry);
+        ProductEntry entry = new ProductEntry(
+            null, product, dateEntry, status,
+            totalWeight, totalAmount,
+            items, deliverer, plate, phone, docs
+        );
+        ProductEntry.validateProductEntry(entry);
 
-            JOptionPane.showMessageDialog(this,
-                "Entrada salva com sucesso.\nCódigo: " + entry.getCodeEntry(),
-                "Sucesso",
-                JOptionPane.INFORMATION_MESSAGE);
-            clearForm();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this,
-                "Erro ao salvar:\n" + ex.getMessage(),
-                "Erro",
-                JOptionPane.ERROR_MESSAGE);
-        }
+        entryController.Post(entry);
+
+        JOptionPane.showMessageDialog(
+            this,
+            "Entrada salva com sucesso.\nCódigo: " + entry.getCodeEntry(),
+            "Sucesso",
+            JOptionPane.INFORMATION_MESSAGE
+        );
+        clearForm();
+
+    } catch (ValidationException ve) {
+        JOptionPane.showMessageDialog(
+            this,
+            "Falha na validação:\n" + ve.getMessage(),
+            "Erro de Validação",
+            JOptionPane.WARNING_MESSAGE
+        );
+        System.out.println(ve.getMessage());
+    } catch (Exception ex) {
+        // Outros erros de persistência ou parsing
+        JOptionPane.showMessageDialog(
+            this,
+            "Erro ao salvar:\n" + ex.getMessage(),
+            "Erro",
+            JOptionPane.ERROR_MESSAGE
+        );
+        System.out.println(ex.getMessage());
     }
-
+}
     private void clearForm() {
         cmbProduct.setSelectedIndex(0);
         dateChooser.setDate(null);

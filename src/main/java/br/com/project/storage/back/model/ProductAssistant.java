@@ -6,9 +6,13 @@ import jakarta.persistence.Embeddable;
 public class ProductAssistant {
     private int batchCode;
     private int quantity;
-    private int totalWeight;
+    private double totalWeight;
+
+    public ProductAssistant(){
+
+    }
     
-    public ProductAssistant(int batchCode, int quantity, int totalWeight) {
+    public ProductAssistant(int batchCode, int quantity, double totalWeight) {
         this.batchCode = batchCode;
         this.quantity = quantity;
         this.totalWeight = totalWeight;
@@ -30,7 +34,7 @@ public class ProductAssistant {
         this.quantity = quantity;
     }
 
-    public int getTotalWeight() {
+    public double getTotalWeight() {
         return totalWeight;
     }
 

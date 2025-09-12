@@ -149,7 +149,7 @@ public class ProductEntry implements Comparable<ProductEntry>{
         this.Document.add(document);
     }
 
-    public void validateProductEntry(ProductEntry entry) throws ValidationException {
+    public static void validateProductEntry(ProductEntry entry) throws ValidationException {
     
     double totalWeight = entry.getItems().stream().mapToDouble(ProductAssistant::getTotalWeight).sum();
 

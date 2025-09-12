@@ -42,7 +42,7 @@ public class ItemDialog extends JDialog {
             try {
                 int batch = Integer.parseInt(txtBatch.getText());
                 int qty   = Integer.parseInt(txtQty.getText());
-                int wgt   = Integer.parseInt(txtWgt.getText());
+                double wgt   = Double.parseDouble(txtWgt.getText());
                 result = new ProductAssistant(batch, qty, wgt);
                 dispose();
             } catch(NumberFormatException ex) {
