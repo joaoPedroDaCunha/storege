@@ -37,4 +37,7 @@ public class ProductEntreyController {
         productEntryService.Delete(idInteger);
     }
 
+    public ProductEntry findByIdWithCollections(Integer idInteger){
+        return productEntryService.findByIdWithCollections(idInteger);
+    }
 }

@@ -84,4 +84,9 @@ public class AuxiliaryDocument {
             return other.id == null;
         } else return id.equals(other.id);
     }
+
+    public String getFileName() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getFileName'");
+    }
 }

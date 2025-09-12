@@ -108,11 +108,9 @@ public class ProductItemView extends JPanel {
             return;
         }
 
-        // Converte índice da visão para o model (caso a tabela esteja ordenada)
         int modelRow = table.convertRowIndexToModel(viewRow);
         Product selected = products.get(modelRow);
 
-        // Exemplo de diálogo de edição — você precisa criar esta classe
         ProductFormDialog dialog = new ProductFormDialog(
             SwingUtilities.getWindowAncestor(this),
             "Editar Produto",
@@ -123,7 +121,6 @@ public class ProductItemView extends JPanel {
         dialog.setModal(true);
         dialog.setVisible(true);
 
-        // Após fechar, recarrega dados (caso tenha havido alteração)
         loadData();
     }
 

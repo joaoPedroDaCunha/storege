@@ -6,9 +6,11 @@ import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.project.storage.back.model.ProductEntry;
 import br.com.project.storage.back.repository.ProductEntryRepository;
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class ProductEntryService {
@@ -40,4 +42,15 @@ public class ProductEntryService {
     public void Delete(Integer idInteger){
         productEntryRepository.deleteById(idInteger);
     }
+
+    @Transactional(readOnly = true)
+    public ProductEntry findByIdWithCollections(Integer id) {
+        ProductEntry entry = productEntryRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Não achou"));
+        // força carregamento
+        entry.getItems().size();
+        entry.getDocument().size();
+        return entry;
+    }
+
 }

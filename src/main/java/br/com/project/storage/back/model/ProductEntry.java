@@ -186,5 +186,10 @@ public class ProductEntry implements Comparable<ProductEntry>{
     public int compareTo(ProductEntry arg0) {
         return dateEntry.compareTo(arg0.dateEntry);
     }
+
+    public ProductEntry findByIdWithCollections(Integer codeEntry2) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findByIdWithCollections'");
+    }
     
 }
