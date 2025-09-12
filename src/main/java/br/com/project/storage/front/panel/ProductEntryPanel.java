@@ -16,6 +16,8 @@ import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.List;
 
@@ -63,7 +65,7 @@ public class ProductEntryPanel extends JPanel {
         gbc.gridx = 0;
         add(new JLabel("Data de Entrada:"), gbc);
         dateChooser = new JDateChooser();
-        dateChooser.setDateFormatString("dd/MM/yyyy");
+        dateChooser.setDateFormatString("dd/MM/yyyy HH:mm");
         gbc.gridx = 1;
         add(dateChooser, gbc);
 
@@ -211,7 +213,8 @@ public class ProductEntryPanel extends JPanel {
 private void onSave() {
     try {
         Product product     = (Product) cmbProduct.getSelectedItem();
-        Date dateEntry      = dateChooser.getDate();
+        Date date = dateChooser.getDate();
+        LocalDateTime dateEntry = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
         EntryStatus status  = EntryStatus.Waiting;
         double totalWeight  = Double.parseDouble(txtTotalWeight.getText());
         int totalAmount     = Integer.parseInt(txtTotalAmount.getText());
@@ -247,7 +250,6 @@ private void onSave() {
         );
         System.out.println(ve.getMessage());
     } catch (Exception ex) {
-        // Outros erros de persistência ou parsing
         JOptionPane.showMessageDialog(
             this,
             "Erro ao salvar:\n" + ex.getMessage(),

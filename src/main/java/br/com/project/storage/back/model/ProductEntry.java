@@ -1,7 +1,7 @@
 package br.com.project.storage.back.model;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import br.com.project.storage.back.enums.CountingFormat;
@@ -20,6 +20,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 
 @Entity
 @Table(name = "ProductEntry")
@@ -27,7 +29,7 @@ public class ProductEntry implements Comparable<ProductEntry>{
 
     private @Column(name = "CodeEntry_id") @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Integer codeEntry;
     private @OneToOne @JoinColumn(name = "Product_id") Product product;
-    private @Column Date dateEntry;
+    private @Column @Temporal(TemporalType.TIMESTAMP) LocalDateTime dateEntry;
     private @Column(name = "EntryStatus") @Enumerated(EnumType.STRING) EntryStatus status;
     private @Column(nullable = false) double totalWeight;
     private @Column(nullable = false) int totalAmount;
@@ -41,7 +43,7 @@ public class ProductEntry implements Comparable<ProductEntry>{
 
     }
 
-    public ProductEntry(Integer codeEntry, Product product, Date dateEntry, EntryStatus status, double totalWeight,
+    public ProductEntry(Integer codeEntry, Product product, LocalDateTime dateEntry, EntryStatus status, double totalWeight,
             int totalAmount, List<ProductAssistant> items, String delivererName, String vehiclePlate, int phone,
             List<AuxiliaryDocument> document) {
         this.codeEntry = codeEntry;
@@ -73,11 +75,11 @@ public class ProductEntry implements Comparable<ProductEntry>{
         this.product = product;
     }
 
-    public Date getDateEntry() {
+    public LocalDateTime getDateEntry() {
         return dateEntry;
     }
 
-    public void setDateEntry(Date dateEntry) {
+    public void setDateEntry(LocalDateTime dateEntry) {
         this.dateEntry = dateEntry;
     }
 
