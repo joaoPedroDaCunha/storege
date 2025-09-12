@@ -19,7 +19,7 @@ public class AuxiliaryDocument {
     private String docInfo;
 
     @ManyToOne
-    @JoinColumn(name = "productEntry_id")
+    @JoinColumn(name = "CodeEntry_id")
     private ProductEntry productEntry;
 
     // Construtor obrigatório para JPA

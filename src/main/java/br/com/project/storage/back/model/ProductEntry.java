@@ -13,10 +13,12 @@ import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -28,7 +30,7 @@ import jakarta.persistence.TemporalType;
 public class ProductEntry implements Comparable<ProductEntry>{
 
     private @Column(name = "CodeEntry_id") @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Integer codeEntry;
-    private @OneToOne @JoinColumn(name = "Product_id") Product product;
+    private @ManyToOne @JoinColumn(name = "Product_id", unique = false, nullable = false) Product product;
     private @Column @Temporal(TemporalType.TIMESTAMP) LocalDateTime dateEntry;
     private @Column(name = "EntryStatus") @Enumerated(EnumType.STRING) EntryStatus status;
     private @Column(nullable = false) double totalWeight;
@@ -37,7 +39,7 @@ public class ProductEntry implements Comparable<ProductEntry>{
     private @Column String delivererName;
     private @Column(name = "vehiclePlate",length = 7,nullable = false)String vehiclePlate;
     private @Column(name = "Phone") int phone;
-    private @OneToMany(mappedBy = "productEntry", cascade = CascadeType.ALL) List<AuxiliaryDocument> Document = new ArrayList<>();
+    private @OneToMany(mappedBy = "productEntry", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY) List<AuxiliaryDocument> Document = new ArrayList<>();
 
     public ProductEntry(){
 

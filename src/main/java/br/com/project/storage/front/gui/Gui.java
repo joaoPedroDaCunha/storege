@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import br.com.project.storage.back.controller.ProductController;
 import br.com.project.storage.back.controller.ProductEntreyController;
 import br.com.project.storage.front.panel.CadasterProductPanel;
+import br.com.project.storage.front.panel.EntryPanelView;
 import br.com.project.storage.front.panel.ProductEntryPanel;
 import br.com.project.storage.front.panel.ProductItemView;
 import br.com.project.storage.front.panel.dashboard;
@@ -64,6 +65,13 @@ public class Gui extends JFrame implements WindowListener{
             repaint();
         });
         JMenuItem itemAbrir = new JMenuItem("Historico");
+        itemAbrir.addActionListener(e ->{
+            getContentPane().removeAll();
+            EntryPanelView entryPanelView = new EntryPanelView(productEntreyController,productController);
+            getContentPane().add(entryPanelView);
+            revalidate();
+            repaint();
+        });
 
         menuEntry.add(itemNovo);
         menuEntry.add(itemAbrir);
