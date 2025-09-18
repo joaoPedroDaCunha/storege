@@ -11,26 +11,25 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 import br.com.project.storage.back.controller.ProductController;
 import br.com.project.storage.back.controller.ProductEntreyController;
 import br.com.project.storage.back.model.ProductEntry;
-import br.com.project.storage.front.Dialog.EntryFormDialog;
 
-public class EntryPanelView extends JPanel{
+public class ProductConferencePanelView extends JPanel{
 
     private final ProductEntreyController productEntreyController;
     private final ProductController productController;
-    
+
     private JTable table;
     private DefaultTableModel tableModel;
     private List<ProductEntry> entry = new ArrayList<>();
 
     DateTimeFormatter fmt = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
 
-    public EntryPanelView(ProductEntreyController productEntreyController, ProductController productController){
+
+    public ProductConferencePanelView (ProductEntreyController productEntreyController, ProductController productController){
         this.productEntreyController = productEntreyController;
         this.productController = productController;
         initUi();
@@ -41,7 +40,6 @@ public class EntryPanelView extends JPanel{
         setLayout(new BorderLayout(16, 16));
 
         String[] columns ={
-            "codeEntry",
             "product",
             "dateEntry",
             "status",
@@ -67,79 +65,18 @@ public class EntryPanelView extends JPanel{
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
 
-        // Painel de botões embaixo
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 8));
-        JButton editButton   = new JButton("Editar");
-        JButton deleteButton = new JButton("Excluir");
+        JButton CheckButton   = new JButton("Conferir");
 
-        editButton.addActionListener(e -> editSelectedProduct());
-        deleteButton.addActionListener(e -> deleteSelectedProduct());
+        CheckButton.addActionListener(e -> CheckSelectedProduct());
 
-        buttonPanel.add(editButton);
-        buttonPanel.add(deleteButton);
+        buttonPanel.add(CheckButton);
         add(buttonPanel, BorderLayout.SOUTH);
-
     }
 
-    private void editSelectedProduct() {
-        int viewRow = table.getSelectedRow();
-        if (viewRow < 0) {
-            JOptionPane.showMessageDialog(this,
-                "Selecione um produto para excluir.",
-                "Atenção",
-                JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        int modelRow = table.convertRowIndexToModel(viewRow);
-        ProductEntry selected = entry.get(modelRow);
-        ProductEntry loaded = productEntreyController.findByIdWithCollections(selected.getCodeEntry());
-            EntryFormDialog dialog = new EntryFormDialog(
-            SwingUtilities.getWindowAncestor(this),
-            "Editar Entrada",
-            productEntreyController,
-            productController,
-            loaded
-        );
-        dialog.setLocationRelativeTo(this);
-        dialog.setModal(true);
-        dialog.setVisible(true);
-
-        loadData();
-    }
-
-    private void deleteSelectedProduct() {
-        int viewRow = table.getSelectedRow();
-        if (viewRow < 0) {
-            JOptionPane.showMessageDialog(this,
-                "Selecione um produto para excluir.",
-                "Atenção",
-                JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        int confirm = JOptionPane.showConfirmDialog(this,
-            "Tem certeza que deseja excluir o produto selecionado?",
-            "Confirmar Exclusão",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE);
-
-        if (confirm != JOptionPane.YES_OPTION) {
-            return;
-        }
-
-        int modelRow = table.convertRowIndexToModel(viewRow);
-        ProductEntry selected = entry.get(modelRow);
-
-        try {
-            productEntreyController.Delete(selected.getCodeEntry());       
-            loadData();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this,
-                "Erro ao excluir produto:\n" + ex.getMessage(),
-                "Erro",
-                JOptionPane.ERROR_MESSAGE);
-        }
+    private Object CheckSelectedProduct() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'CheckSelectedProduct'");
     }
 
     private void loadData(){
@@ -147,10 +84,9 @@ public class EntryPanelView extends JPanel{
         tableModel.setRowCount(0);
 
         try {
-            entry.addAll(this.productEntreyController.getAll());
+            entry.addAll(this.productEntreyController.getAllWaiting());
             for(ProductEntry e : entry){
                 Object[] row={
-                    e.getCodeEntry(),
                     e.getProduct(),
                     e.getDateEntry().format(fmt),
                     e.getStatus(),
@@ -171,4 +107,5 @@ public class EntryPanelView extends JPanel{
             );
         }
     }
+    
 }

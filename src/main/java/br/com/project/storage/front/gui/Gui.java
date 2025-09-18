@@ -12,6 +12,7 @@ import br.com.project.storage.back.controller.ProductController;
 import br.com.project.storage.back.controller.ProductEntreyController;
 import br.com.project.storage.front.panel.CadasterProductPanel;
 import br.com.project.storage.front.panel.EntryPanelView;
+import br.com.project.storage.front.panel.ProductConferencePanelView;
 import br.com.project.storage.front.panel.ProductEntryPanel;
 import br.com.project.storage.front.panel.ProductItemView;
 import br.com.project.storage.front.panel.dashboard;
@@ -79,6 +80,13 @@ public class Gui extends JFrame implements WindowListener{
 
         JMenu menConferecia = new JMenu("Conferencia");
         JMenuItem itemSobre = new JMenuItem("Entradas Para Conferir");
+        itemSobre.addActionListener(e ->{
+            getContentPane().removeAll();
+            ProductConferencePanelView ProductConferencePanel = new ProductConferencePanelView(productEntreyController,productController);
+            getContentPane().add(ProductConferencePanel);
+            revalidate();
+            repaint();
+        });
         menConferecia.add(itemSobre);
         menuBar.add(menConferecia);
 
