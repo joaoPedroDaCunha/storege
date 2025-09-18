@@ -1,13 +1,17 @@
 package br.com.project.storage.back.service;
 
+import java.util.Comparator;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.project.storage.back.enums.EntryStatus;
 import br.com.project.storage.back.model.ProductEntry;
 import br.com.project.storage.back.repository.ProductEntryRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -22,6 +26,13 @@ public class ProductEntryService {
         productEntrey.forEach(get::add);
         return get ;
     }
+
+    public Set<ProductEntry> getAllWaiting() {
+    return StreamSupport.stream(productEntryRepository.findAll().spliterator(), false)
+        .filter(pe -> pe.getStatus() == EntryStatus.Waiting)
+        .collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparingInt(ProductEntry::getCodeEntry))));
+    }
+
 
     public Optional<ProductEntry> getById (Integer idInteger){
         return productEntryRepository.findById(idInteger);
