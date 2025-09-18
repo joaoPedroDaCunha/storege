@@ -21,6 +21,10 @@ public class ProductEntreyController {
         return productEntryService.getById(idInteger);
     }
 
+    public Set<ProductEntry> getAllWaiting(){
+        return productEntryService.getAllWaiting();
+    }
+
     public void Post(ProductEntry productEntry){
         productEntryService.Post(productEntry);
     }
