@@ -11,11 +11,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 import br.com.project.storage.back.controller.ProductController;
 import br.com.project.storage.back.controller.ProductEntreyController;
 import br.com.project.storage.back.model.ProductEntry;
+import br.com.project.storage.front.Dialog.ProductConferenceDialog;
 
 public class ProductConferencePanelView extends JPanel{
 
@@ -74,9 +76,31 @@ public class ProductConferencePanelView extends JPanel{
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
-    private Object CheckSelectedProduct() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'CheckSelectedProduct'");
+    private void CheckSelectedProduct() {
+         int viewRow = table.getSelectedRow();
+        if (viewRow < 0) {
+            JOptionPane.showMessageDialog(this,
+                "Selecione um produto para excluir.",
+                "Atenção",
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int modelRow = table.convertRowIndexToModel(viewRow);
+        ProductEntry selected = entry.get(modelRow);
+        ProductEntry loaded = productEntreyController.findByIdWithCollections(selected.getCodeEntry());
+        ProductConferenceDialog dialog = new ProductConferenceDialog(
+            SwingUtilities.getWindowAncestor(this),
+            "Conferecia",
+            productEntreyController,
+            productController,
+            loaded
+        );
+        dialog.setLocationRelativeTo(this);
+        dialog.setModal(true);
+        dialog.setVisible(true);
+
+        loadData();
     }
 
     private void loadData(){

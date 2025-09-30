@@ -39,6 +39,7 @@ public class ProductEntry implements Comparable<ProductEntry>{
     private @Column(name = "vehiclePlate",length = 7,nullable = false)String vehiclePlate;
     private @Column(name = "Phone") int phone;
     private @OneToMany(mappedBy = "productEntry", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY) List<AuxiliaryDocument> Document = new ArrayList<>();
+    private String comeString ; 
 
     public ProductEntry(){
 
@@ -152,33 +153,76 @@ public class ProductEntry implements Comparable<ProductEntry>{
         this.Document.add(document);
     }
 
+    public String getComeString() {
+        return comeString;
+    }
+
+    public void setComeString(String comeString) {
+        this.comeString = comeString;
+    }
+
     public static void validateProductEntry(ProductEntry entry) throws ValidationException {
     
-    double totalWeight = entry.getItems().stream().mapToDouble(ProductAssistant::getTotalWeight).sum();
+        double totalWeight = entry.getItems().stream().mapToDouble(ProductAssistant::getTotalWeight).sum();
 
-    int totalUnits = entry.getItems().stream().mapToInt(ProductAssistant::getQuantity).sum();
+        int totalUnits = entry.getItems().stream().mapToInt(ProductAssistant::getQuantity).sum();
 
-    CountingFormat format = entry.getProduct().getFormat();
-    boolean isValid;
+        CountingFormat format = entry.getProduct().getFormat();
+        boolean isValid;
 
-    switch (format) {
-        case Unit:
-            isValid = totalUnits == entry.getTotalAmount();
-            break;
-        case Weight:
-            isValid = Double.compare(totalWeight, entry.getTotalWeight()) == 0;
-            break;
-        case WeightEndUnit:
-            isValid = Double.compare(totalWeight, entry.getTotalWeight()) == 0 && totalUnits == entry.getTotalAmount();
-            break;
-        default:
-            throw new IllegalArgumentException("Formato desconhecido: " + format);
+        switch (format) {
+            case Unit:
+                isValid = totalUnits == entry.getTotalAmount();
+                break;
+            case Weight:
+                isValid = Double.compare(totalWeight, entry.getTotalWeight()) == 0;
+                break;
+            case WeightEndUnit:
+                isValid = Double.compare(totalWeight, entry.getTotalWeight()) == 0 && totalUnits == entry.getTotalAmount();
+                break;
+            default:
+                throw new IllegalArgumentException("Formato desconhecido: " + format);
+        }
+
+        if (!isValid) {
+            throw new ValidationException(format, totalWeight, totalUnits, entry);
+        }
     }
 
-    if (!isValid) {
-        throw new ValidationException(format, totalWeight, totalUnits, entry);
+    public void ConfereceItems(List<ProductAssistant> confereceItems){
+        Boolean BatchCode = null ;
+        boolean Divergencia = false;
+        for(ProductAssistant assistant : items ){
+            for(ProductAssistant confereceAssistant : confereceItems){
+                if (assistant.getBatchCode() == confereceAssistant.getBatchCode()) {
+                    BatchCode  = true ;
+                    boolean quantity = assistant.getQuantity() == confereceAssistant.getQuantity();
+                    if(quantity = false){
+                        comeString = comeString + "Divergencia encontrada no lote "+assistant.getBatchCode()+" quntidade esperada :"+assistant.getQuantity()+
+                        "quntidade encontrada : " + confereceAssistant.getQuantity();
+                        Divergencia = true;
+                    }
+                    boolean totalWeight = assistant.getTotalWeight() == confereceAssistant.getTotalWeight();
+                    if(totalWeight = false){
+                        if (quantity = false) {
+                            comeString = comeString + ", peso esperado : "+ assistant.getTotalWeight()+" peso encontrado "+ confereceAssistant.getTotalWeight();
+                        }else{
+                            comeString = comeString + "Divergencia encontrada no lote "+assistant.getBatchCode()+" peso esperada :"+assistant.getTotalWeight()+
+                        "peso encontrada : " + confereceAssistant.getTotalWeight();
+                        }
+                        Divergencia = true;
+                    }
+                }else{
+                    BatchCode = false;
+                    Divergencia = true;
+                }
+            }
+            if(BatchCode == false){
+                comeString = comeString + " Divergencia encontrada no lote "+assistant.getBatchCode()+" ,";
+                Divergencia = true;
+            }
+        }
     }
-}
 
 
     @Override
@@ -187,7 +231,6 @@ public class ProductEntry implements Comparable<ProductEntry>{
     }
 
     public ProductEntry findByIdWithCollections(Integer codeEntry2) {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findByIdWithCollections'");
     }
     
