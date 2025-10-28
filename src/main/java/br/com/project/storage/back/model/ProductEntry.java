@@ -2,10 +2,16 @@ package br.com.project.storage.back.model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import br.com.project.storage.back.enums.CountingFormat;
 import br.com.project.storage.back.enums.EntryStatus;
+import br.com.project.storage.back.excptions.ProductMismatchException;
 import br.com.project.storage.back.excptions.ValidationException;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -189,40 +195,41 @@ public class ProductEntry implements Comparable<ProductEntry>{
         }
     }
 
-    public void ConfereceItems(List<ProductAssistant> confereceItems){
-        Boolean BatchCode = null ;
-        boolean Divergencia = false;
-        for(ProductAssistant assistant : items ){
-            for(ProductAssistant confereceAssistant : confereceItems){
-                if (assistant.getBatchCode() == confereceAssistant.getBatchCode()) {
-                    BatchCode  = true ;
-                    boolean quantity = assistant.getQuantity() == confereceAssistant.getQuantity();
-                    if(quantity = false){
-                        comeString = comeString + "Divergencia encontrada no lote "+assistant.getBatchCode()+" quntidade esperada :"+assistant.getQuantity()+
-                        "quntidade encontrada : " + confereceAssistant.getQuantity();
-                        Divergencia = true;
-                    }
-                    boolean totalWeight = assistant.getTotalWeight() == confereceAssistant.getTotalWeight();
-                    if(totalWeight = false){
-                        if (quantity = false) {
-                            comeString = comeString + ", peso esperado : "+ assistant.getTotalWeight()+" peso encontrado "+ confereceAssistant.getTotalWeight();
-                        }else{
-                            comeString = comeString + "Divergencia encontrada no lote "+assistant.getBatchCode()+" peso esperada :"+assistant.getTotalWeight()+
-                        "peso encontrada : " + confereceAssistant.getTotalWeight();
-                        }
-                        Divergencia = true;
-                    }
-                }else{
-                    BatchCode = false;
-                    Divergencia = true;
-                }
-            }
-            if(BatchCode == false){
-                comeString = comeString + " Divergencia encontrada no lote "+assistant.getBatchCode()+" ,";
-                Divergencia = true;
-            }
+public void confereItems(List<ProductAssistant> confereceItems) {
+    Objects.requireNonNull(confereceItems, "Lista de conferência não pode ser nula");
+
+    if (items.size() != confereceItems.size()) {
+        throw new ProductMismatchException("Divergência: quantidades de lotes diferentes");
+    }
+
+    Map<Integer, ProductAssistant> productMap = confereceItems.stream()
+        .collect(Collectors.toMap(ProductAssistant::getBatchCode, Function.identity(), (a, b) -> a));
+
+    List<String> divergences = new ArrayList<>();
+
+    for (ProductAssistant expected : items) {
+        ProductAssistant actual = productMap.get(expected.getBatchCode());
+        if (actual == null) {
+            divergences.add("Lote " + expected.getBatchCode() + " não encontrado na lista de conferência");
+            continue;
+        }
+
+        if (!expected.equals(actual)) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("LOTE: ").append(expected.getBatchCode())
+              .append(" | Esperado - quantidade: ").append(expected.getQuantity())
+              .append(", peso: ").append(expected.getTotalWeight())
+              .append(" | Encontrado - quantidade: ").append(actual.getQuantity())
+              .append(", peso: ").append(actual.getTotalWeight());
+            divergences.add(sb.toString());
         }
     }
+
+    if (!divergences.isEmpty()) {
+        throw new ProductMismatchException("Divergências encontradas:\n" + String.join("\n", divergences));
+    }
+}
+
 
 
     @Override
