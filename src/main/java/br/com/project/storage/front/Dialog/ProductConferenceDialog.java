@@ -5,7 +5,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Window;
-import java.util.stream.IntStream;
+import java.util.Collections;
+import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -19,6 +20,7 @@ import javax.swing.SwingUtilities;
 
 import br.com.project.storage.back.controller.ProductController;
 import br.com.project.storage.back.controller.ProductEntreyController;
+import br.com.project.storage.back.excptions.ProductMismatchException;
 import br.com.project.storage.back.model.ProductAssistant;
 import br.com.project.storage.back.model.ProductEntry;
 
@@ -77,6 +79,14 @@ public class ProductConferenceDialog extends JDialog {
         gbc.gridx = 3;
         form.add(btnRemoveItem, gbc);
 
+        // botão conferir entrada
+        JButton btnConferenceItem = new JButton("Conferir Entrada");
+        btnConferenceItem.addActionListener(e -> onConfereEntry());
+        gbc.gridx = 2;
+        gbc.gridy++;
+        form.add(btnConferenceItem, gbc);
+
+
         // agora adiciona o painel "form" ao JDialog usando BorderLayout
         add(form, BorderLayout.CENTER);
     }
@@ -99,6 +109,18 @@ public class ProductConferenceDialog extends JDialog {
                 "Selecione um item para remover.",
                 "Atenção",
                 JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    private void onConfereEntry(){
+        try {
+            List<ProductAssistant> items = Collections.list(itemsModel.elements());
+            productEntry.confereItems(items);
+        } catch (ProductMismatchException e) {
+            JOptionPane.showMessageDialog(this,
+                "Erro :\n" + e.getMessage(),
+                "Erro",
+                JOptionPane.ERROR_MESSAGE);
         }
     }
 
